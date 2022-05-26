@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--status = "warn" 日志框架本身的输入日志级别
+    monitorInterval = "5" 自动加载配置文件的时间间隔不低于5s
+ -->
+<Configuration status="warn" monitorInterval="5">
+
+    <!-- 日志级别以及优先级排序 :
+        在log4j2中， 共有8个级别，按照从低到高为：ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF。
+        All:最低等级的，用于打开所有日志记录.
+        　　　　　                   　Trace:是追踪，就是程序推进一下.
+
+        　　　　　　                   Debug:指出细粒度信息事件对调试应用程序是非常有帮助的.
+
+        　　　　　                   　Info:消息在粗粒度级别上突出强调应用程序的运行过程.
+
+        　　　　　                　   Warn:输出警告及warn以下级别的日志.
+
+        　　　　　　                   Error:输出错误信息日志.
+
+        　　　　　　                   Fatal:输出每个严重的错误事件将会导致应用程序的退出的日志.
+
+        　　　　　　                   OFF:最高等级的，用于关闭所有日志记录.
+
+        程序会打印高于或等于所设置级别的日志，设置的日志等级越高，打印出来的日志就越少。
+    -->
+
+    <!--
+    集中配置属性进行管理
+    -->
+    <Properties>
+        <!--
+            定义格式化输出：
+            %d表示日期，
+            %thread表示线程名，
+            %-5level：级别从左显示5个字符宽度
+            %msg：日志消息，%n是换行符
+            %logger{36} 表示 Logger 名字最长36个字符
+        -->
+        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level}[%thread] %style{%logger{36}}{cyan} : %msg%n" />
+
+        <!-- 定义日志存储的路径，绝对路径 -->
+        <property name="FILE_PATH" value="存储的绝对路径" />
+        <property name="FILE_NAME" value="项目名称" />
+    </Properties>
+
+    <!--日志处理-->
+    <Appenders>
+        <!--*********************控制台日志***********************-->
+        <!--
+            target: SYSTEM_OUT 或 SYSTEM_ERR,一般只设置默认:SYSTEM_OUT.
+        -->
+        <console name="Console" target="SYSTEM_OUT">
+            <!--输出日志的格式和颜色-->
+            <PatternLayout pattern="${LOG_PATTERN}" disableAnsi="false" noConsoleNoAnsi="false"/>
+            <!--控制台只输出level及其以上级别的信息（onMatch）放行，其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        </console>
+
+        <!--*********************文件日志***********************-->
+
+        <!--按照一定规则查分日志文件的appender /logs/$${date:yyyy-MM-dd}/myrollog-%d{yyyy-MM-dd-HH-mm}-%i.log
+                                              /logs:放在logs这个目录下，/$${date:yyyy-MM-dd}:以天为单位生成文件夹
+                                              myrollog-%d{yyyy-MM-dd-HH-mm}-%d: 以分钟为单位到达了指定大小在进行拆分
+                                              .gz 进行压缩归档
+        -->
+
+        <!--
+        error 运行时异常日志信息
+        -->
+        <RollingFile name = "errorRollingFile" fileName = "${FILE_NAME}/error日志.log"
+                     filePattern = "${FILE_PATH}/$${date:yyyy-MM-dd}/error-%d{yyyy-MM-dd-HH-mm}-%i.log.gz">
+            <!--日志级别过滤器，文件只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--日志的消息格式-->
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %l %c{36} - %msg%n"/>
+            <!--在系统每次启动时，触发拆分规则，生产一个新的日志文件-->
+            <OnStartupTriggeringPolicy/>
+            <!--按照文件大小进行拆分-->
+            <SizeBasedTriggeringPolicy size = "10 MB"/>
+            <!--按照时间节点进行拆分-->
+            <TimeBasedTriggeringPolicy/>
+            <!--在同一个目录下，文件的个数限定为30个，超过按照实际进行覆盖-->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+
+        <!--
+        fatal 正常运行时日志
+        -->
+        <RollingFile name = "fatalRollingFile" fileName = "${FILE_NAME}/fatal日志.log"
+                     filePattern = "${FILE_PATH}/$${date:yyyy-MM-dd}/fatal-%d{yyyy-MM-dd-HH-mm}-%i.log.gz">
+            <!--日志级别过滤器，文件只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--日志的消息格式-->
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <!--在系统每次启动时，触发拆分规则，生产一个新的日志文件-->
+            <OnStartupTriggeringPolicy/>
+            <!--按照文件大小进行拆分-->
+            <SizeBasedTriggeringPolicy size = "10 MB"/>
+            <!--按照时间节点进行拆分-->
+            <TimeBasedTriggeringPolicy/>
+            <!--在同一个目录下，文件的个数限定为30个，超过按照实际进行覆盖-->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+
+        <!--
+       info 操作日志
+       -->
+        <RollingFile name = "infoRollingFile" fileName = "${FILE_NAME}/info日志.log"
+                     filePattern = "${FILE_PATH}/$${date:yyyy-MM-dd}/info-%d{yyyy-MM-dd-HH-mm}-%i.log.gz">
+            <!--日志级别过滤器，文件只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--日志的消息格式-->
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <!--在系统每次启动时，触发拆分规则，生产一个新的日志文件-->
+            <OnStartupTriggeringPolicy/>
+            <!--按照文件大小进行拆分-->
+            <SizeBasedTriggeringPolicy size = "10 MB"/>
+            <!--按照时间节点进行拆分-->
+            <TimeBasedTriggeringPolicy/>
+            <!--在同一个目录下，文件的个数限定为30个，超过按照实际进行覆盖-->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <!--Logger节点用来单独指定日志的形式，比如要为指定包下的class指定不同的日志级别等。-->
+    <!--然后定义loggers，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+        <!--过滤掉spring和mybatis的一些无用的信息-->
+        <logger name="org.mybatis" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </logger>
+        <!--监控系统信息-->
+        <!--若是additivity设为false，则 子Logger 只会在自己的appender里输出，而不会在 父Logger 的appender里输出。-->
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+
+        <root level="info">
+            <!--控制台-->
+            <appender-ref ref="Console"/>
+            <!--用户操作文件-->
+            <appender-ref ref="infoRollingFile"/>
+            <!--调试错误文件-->
+            <appender-ref ref="errorRollingFile"/>
+            <!--正常运行文件-->
+            <appender-ref ref="fatalRollingFile"/>
+        </root>
+
+    </loggers>
+
+</Configuration>
