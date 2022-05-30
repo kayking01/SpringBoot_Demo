@@ -1,6 +1,7 @@
 package com.shirodemo.kay.config;
 
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,12 +30,20 @@ public class ShiroConfig {
         filterMap.put("/shiro/user/add","authc");
         filterMap.put("/shiro/user/update","authc");
         */
-// 拦截  授权和认证放在Realm类中
+        // 拦截  授权和认证放在Realm类中
         Map<String, String> filterMap = new LinkedHashMap<>();
+        // 授权（放在前面，否则（会失效）重复的map key 只会put第一个）
+        filterMap.put("/shiro/user/add","perms[user:add]");
+        filterMap.put("/shiro/user/update","perms[user:update]");
+        // 拦截
         filterMap.put("/shiro/user/*","authc");  // 支持通配符
         bean.setFilterChainDefinitionMap(filterMap);
+
         //设置 登录页面 （没有权限时，会跳到登陆界面）
         bean.setLoginUrl("/shiro/toLogin");
+        //设置 未授权页面（没有设置时，会报401错误（未授权））
+        bean.setUnauthorizedUrl("/shiro/unauth");
+
 
         return bean;
     }
@@ -49,5 +58,11 @@ public class ShiroConfig {
     @Bean
     public UserRealm userRealm(){
         return new UserRealm();
+    }
+
+    //ShiroDialect ： 整合 shiro thymeleaf
+    @Bean
+    public ShiroDialect getShiroDialect(){
+        return new ShiroDialect();
     }
 }

@@ -30,6 +30,10 @@ public class TestUser implements Serializable {
      * 
      */
     private String password;
+    /*
+    权限
+    */
+    private String perms;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

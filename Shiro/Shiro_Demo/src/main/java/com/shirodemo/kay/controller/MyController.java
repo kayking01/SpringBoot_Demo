@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/shiro")
@@ -52,5 +53,11 @@ public class MyController {
             model.addAttribute("msg","密码错误");
             return "login";
         }
+    }
+
+    @RequestMapping("/unauth")
+    @ResponseBody
+    public String unauthorized(){
+        return "未授权操作";
     }
 }
