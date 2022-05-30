@@ -2,7 +2,7 @@
 <!--status = "warn" 日志框架本身的输入日志级别
     monitorInterval = "5" 自动加载配置文件的时间间隔不低于5s
  -->
-<Configuration status="warn" monitorInterval="5">
+<Configuration status="ERROR" monitorInterval="5">
 
     <!-- 日志级别以及优先级排序 :
         在log4j2中， 共有8个级别，按照从低到高为：ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF。
@@ -151,5 +151,7 @@
         </root>
 
     </loggers>
+
+
 
 </Configuration>

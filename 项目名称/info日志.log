@@ -1,6 +1,9 @@
-2022-05-26 19:01:59.503 INFO [main] org.apache.shiro.session.mgt.AbstractValidatingSessionManager : Enabling session validation scheduler...
-2022-05-26 19:01:59.833 INFO [main] com.shirodemo.kay.test.Quickstart : Retrieved the correct value! [aValue]
-2022-05-26 19:01:59.833 INFO [main] com.shirodemo.kay.test.Quickstart : User [lonestarr] logged in successfully.
-2022-05-26 19:01:59.833 INFO [main] com.shirodemo.kay.test.Quickstart : May the Schwartz be with you!
-2022-05-26 19:01:59.833 INFO [main] com.shirodemo.kay.test.Quickstart : You may use a lightsaber ring.  Use it wisely.
-2022-05-26 19:01:59.833 INFO [main] com.shirodemo.kay.test.Quickstart : You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  Here are the keys - have fun!
+2022-05-30 09:01:02.517 INFO [restartedMain] com.shirodemo.kay.ShiroDemoApplication : Starting ShiroDemoApplication using Java 1.8.0_331 on KayFz with PID 10448 (D:\AppData\IDEA_WorkSpace\SpringBoot_Demo\Shiro\Shiro_Demo\target\classes started by kay in D:\AppData\IDEA_WorkSpace\SpringBoot_Demo)
+2022-05-30 09:01:02.535 INFO [restartedMain] com.shirodemo.kay.ShiroDemoApplication : No active profile set, falling back to 1 default profile: "default"
+2022-05-30 09:01:04.569 INFO [restartedMain] com.shirodemo.kay.ShiroDemoApplication : Started ShiroDemoApplication in 2.303 seconds (JVM running for 3.306)
+2022-05-30 09:03:03.281 INFO [http-nio-8080-exec-9] com.alibaba.druid.pool.DruidDataSource : {dataSource-1} inited
+2022-05-30 09:03:12.861 INFO [http-nio-8080-exec-10] com.shirodemo.kay.test.Quickstart : There is no user with username of null
+2022-05-30 09:03:16.734 INFO [http-nio-8080-exec-1] com.shirodemo.kay.test.Quickstart : There is no user with username of 
+2022-05-30 09:03:17.908 INFO [http-nio-8080-exec-2] com.shirodemo.kay.test.Quickstart : There is no user with username of 
+2022-05-30 09:03:18.392 INFO [http-nio-8080-exec-3] com.shirodemo.kay.test.Quickstart : There is no user with username of 
+2022-05-30 09:03:26.173 INFO [http-nio-8080-exec-4] com.shirodemo.kay.test.Quickstart : There is no user with username of null

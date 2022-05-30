@@ -23,34 +23,34 @@ public class Quickstart {
     public static void main(String[] args) {
 
         // Use the shiro.ini file at the root of the classpath
-        // (file: and url: prefixes load from files and urls respectively):
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
         SecurityManager securityManager = factory.getInstance();
+        // 使 securityManager 为singleton
         SecurityUtils.setSecurityManager(securityManager);
 
         // Now that a simple Shiro environment is set up, let's see what you can do:
 
-        // get the currently executing user:
         // 获取 当前用户 对象 Subject
         Subject currentUser = SecurityUtils.getSubject();
 
-        // Do some stuff with a Session (no need for a web or EJB container!!!)
+
         // 通过当前用户拿到 session
         Session session = currentUser.getSession();
         session.setAttribute("someKey", "aValue");
         String value = (String) session.getAttribute("someKey");
         if (value.equals("aValue")) {
-            log.info("Retrieved the correct value! [" + value + "]");
+            log.info("getAttribute BY Session: [" + value + "]");
         }
 
         // 判断当前用户是否被认证
         if (!currentUser.isAuthenticated()) {
+            // Token 令牌 通过用户账号密码生成一个Token
             UsernamePasswordToken token = new UsernamePasswordToken("lonestarr", "vespa");
             token.setRememberMe(true);
             try {
-                currentUser.login(token);
+                currentUser.login(token);   // 执行登录操作
             } catch (UnknownAccountException uae) {
-                log.info("There is no user with username of " + token.getPrincipal());
+                log.info("There is no user with username of " +  token.getPrincipal());
             } catch (IncorrectCredentialsException ice) {
                 log.info("Password for account " + token.getPrincipal() + " was incorrect!");
             } catch (LockedAccountException lae) {
@@ -74,6 +74,7 @@ public class Quickstart {
             log.info("Hello, mere mortal.");
         }
 
+        // 粗粒度
         //test a typed permission (not instance-level)
         if (currentUser.isPermitted("lightsaber:wield")) {
             log.info("You may use a lightsaber ring.  Use it wisely.");
@@ -81,6 +82,7 @@ public class Quickstart {
             log.info("Sorry, lightsaber rings are for schwartz masters only.");
         }
 
+        // 细粒度
         //a (very powerful) Instance Level permission:
         if (currentUser.isPermitted("winnebago:drive:eagle5")) {
             log.info("You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  " +
@@ -88,10 +90,10 @@ public class Quickstart {
         } else {
             log.info("Sorry, you aren't allowed to drive the 'eagle5' winnebago!");
         }
-
+        //注销
         //all done - log out!
         currentUser.logout();
-
+        // 结束！
         System.exit(0);
     }
 }
